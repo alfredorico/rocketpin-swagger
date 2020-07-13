@@ -189,7 +189,7 @@ paths:
       tags:
         - Sessions Resource
       parameters: []
-  '/api/communes?{country_id}':
+  '/api/communes':
     get:
       responses:
         '200':
@@ -209,6 +209,14 @@ paths:
       tags:
         - Headquarter Resource
       parameters:
+        - in: query
+          name: country_id
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 1            
+          description: "Identificador de País. Los valores se corresponden a: 1 - Chile, 2 - Argentina, 4 - Uruguay, 5 - México"
         - name: X-AdminUser-Token
           in: header
           description: e.g. xxxxxxxxxxxxxxxxxxxx
