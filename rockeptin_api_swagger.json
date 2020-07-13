@@ -1,0 +1,597 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Rocketpin API",
+    "version": "",
+    "description": "RocketPin es una aplicación que combina el poder del crowdsourcing con tecnología móvil para entregar información en línea de tu negocio.\n\n## Especificaciones del API\n\nTodo el acceso a la API,  se realiza a través de HTTP (proximaente HTTPS), y se accede a el desde el host https://rocketpin.com/api. Todos los datos se envían y se reciben como JSON.\n\nTodas las llamadas a la API requieren la convinación de un token de acceso (X-AdminUser-Token) más el email (X-AdminUser-Email) del usuario. De lo contrario se puede acceder mediante cookies propias de Devise (https://github.com/plataformatec/devise).\n\n## Solicitudes HTTP permitidas:\n\n- POST   :   Para crear un recurso\n\n- GET    :   Obtener un recurso o una lista de recursos\n\n- DELETE :   Para eliminar un recurso\n\n- PUT    :   Para actualizar un recurso\n\n- PATCH  :   Para actualizar un recurso especifico\n\n## Respuestas habituales del servidor\n\n- 200 `OK` - La solicitud fue satisfactoria.\n\n- 201 `Created` - La solicitud tuvo éxito y se creó un recurso.\n\n- 204 `No Content` - La solicitud tuvo éxito pero no hay ninguna representación para devolver (es decir, la respuesta está vacía).\n\n- 401 `Unauthorized` - Falló la autenticación o el usuario no tiene permisos para la operación solicitada.\n\n- 403 `Forbidden` - Acceso denegado.\n\n- 404 `Not Found` - Recurso no encontrado.\n\n- 405 `Method Not Allowed` - Método solicitado no es compatible con el recurso.\n\n- 422 `Unprocessable Entity` - La solicitud no pudo ser entendida o faltaba los parámetros requeridos.\n\n## Paginación\n\nPara el manejo de paginación es importante conocer la información proporcionada por las cabeceras de algunos recursos que devuelven demasiada información\n\n- X-Page: `int` La pagina correspondiente a la respuesta\n\n- X-Page-Total: `int` El total de paginas disponibles\n\n## Fechas\n\nTodas las fechas deben estar en formato `ISO 8601` (ejemplo: 2018-04-15T15:52:01.000Z)\n\n## Errors\n\nTodos los errores, a menos que sean especificados, deben tener este formato, \ndonde el **mensaje** es una descripción general del error \ny los errores son un objeto con errores específicos en la solicitud. \nAdemas la respuesta devuelve un código http `422`\n\n```json\n{\n  \"message\": \"this is a description\",\n  \"errors\": {\n    \"no_doc\": \"no doc property\",\n    \"foo\": \"foo\",\n    \"bar\": \"bar\"\n  }\n}\n```"
+  },
+  "host": "qa.rocketpin.com",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/sessions": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Crea una nueva session",
+        "tags": [
+          "Sessions Resource"
+        ],
+        "parameters": [
+          {
+            "name": "X-Auth-Platform",
+            "in": "header",
+            "description": "e.g. (optional, string, `facebook`) - Especifica que plataforma se usara para autentificar al usuario (solo en caso de autenticacion a travez de Oauth)",
+            "required": false,
+            "x-example": "(optional, string, `facebook`) - Especifica que plataforma se usara para autentificar al usuario (solo en caso de autenticacion a travez de Oauth)",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "session[email]"
+              ],
+              "properties": {
+                "session[email]": {
+                  "type": "string",
+                  "description": "Email del shopper"
+                },
+                "session[password]": {
+                  "type": "string",
+                  "description": "Contraseña del shopper (solo en caso de autenticacion normal)"
+                },
+                "session[token]": {
+                  "type": "string",
+                  "description": "Token del shopper (solo en caso de autenticacion a travez de Oauth)"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Elimina la session actual",
+        "tags": [
+          "Sessions Resource"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/me": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Muesta datos del usuario actual",
+        "tags": [
+          "Sessions Resource"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/communes?{country_id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Ver listado de comunas (campains)\n\nEste servicio devolverá un arreglo de objetos en donde cada objeto representa \nuna comuna conteniendo el atributo *id* que identifica a la misma.",
+        "tags": [
+          "Headquarter Resource"
+        ],
+        "parameters": [
+          {
+            "name": "X-AdminUser-Token",
+            "in": "header",
+            "description": "e.g. xxxxxxxxxxxxxxxxxxxx",
+            "required": false,
+            "x-example": "xxxxxxxxxxxxxxxxxxxx",
+            "type": "string"
+          },
+          {
+            "name": "X-AdminUser-Email",
+            "in": "header",
+            "description": "e.g. apiqa@rocketpin.com",
+            "required": false,
+            "x-example": "apiqa@rocketpin.com",
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "e.g. application/vnd.rocketpin+json; version=2",
+            "required": false,
+            "x-example": "application/vnd.rocketpin+json; version=2",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/api/headquarters": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Crear nueva sucursal\n\nPara la creación de una nueva sucursal se debe construir un json con la estructura indicada.\nRecordemos que primero debemos tener el *id* de la comuna obtenido mediante el servicio anterior.\nDicho valor será utilizado en el atributo commune_id para la creación de la sucursal.\nUna vez que se consuma el servicio y se crea satisfactoriamente la sucurusal se obtenbdrá \nel json de respuesta del cual debemos tomar el valor del atributo *id* que identifica la sucursal\nen vista de que este será utilizado en el campo *headquarter_id* al momento de construir la misión",
+        "tags": [
+          "Headquarter Resource"
+        ],
+        "parameters": [
+          {
+            "name": "X-AdminUser-Token",
+            "in": "header",
+            "description": "e.g. xxxxxxxxxxxxxxxxxxxx",
+            "required": false,
+            "x-example": "xxxxxxxxxxxxxxxxxxxx",
+            "type": "string"
+          },
+          {
+            "name": "X-AdminUser-Email",
+            "in": "header",
+            "description": "e.g. apiqa@rocketpin.com",
+            "required": false,
+            "x-example": "apiqa@rocketpin.com",
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "e.g. application/vnd.rocketpin+json; version=2",
+            "required": false,
+            "x-example": "application/vnd.rocketpin+json; version=2",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "headquarter": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "description": "Nombre interno del cliente,"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Nombre de la sucursal,"
+                    },
+                    "phone_1": {
+                      "type": "string",
+                      "description": "Numero telefónico"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Texto de descripción adicional"
+                    },
+                    "address": {
+                      "type": "object",
+                      "properties": {
+                        "street": {
+                          "type": "string",
+                          "description": "Nombre de la calle"
+                        },
+                        "full_address": {
+                          "type": "string",
+                          "description": "Nombre de la calle"
+                        },
+                        "lat": {
+                          "type": "number",
+                          "description": "Latitud de dirección"
+                        },
+                        "long": {
+                          "type": "number",
+                          "description": "Longitud de dirección"
+                        },
+                        "commune_id": {
+                          "type": "string",
+                          "description": "ID de comuna. Este se obtiene consultando el servicio [GET] /api/communes"
+                        }
+                      },
+                      "required": [
+                        "street",
+                        "lat",
+                        "long"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              },
+              "example": {
+                "headquarter": {
+                  "code": "CON132F",
+                  "name": "[CON9] Sede Calbacura",
+                  "phone_1": "384738263",
+                  "description": "Sucursal objetivo con objetivo principal",
+                  "address": {
+                    "street": "Calbucura 6991, Huechuraba, Chile",
+                    "full_address": "Calbucura 6991, Huechuraba, Chile. Diagonal a la plaza central, en edificio de rejas negras",
+                    "lat": 33.359,
+                    "long": 70.66611,
+                    "commune_id": "13101"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/campains/{campainId}/missions": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Obtener misiones de una campaña",
+        "tags": [
+          "Campain Resources"
+        ],
+        "parameters": []
+      },
+      "post": {
+        "responses": {},
+        "summary": "",
+        "operationId": "",
+        "description": "Creación de inspección de Vehículos",
+        "tags": [
+          "Tipos de misiones"
+        ],
+        "parameters": [
+          {
+            "name": "campainId",
+            "in": "path",
+            "description": "Identificador de la campaña",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "X-AdminUser-Token",
+            "in": "header",
+            "description": "e.g. xxxxxxxxxxxxxxxxxxxx",
+            "required": false,
+            "x-example": "xxxxxxxxxxxxxxxxxxxx",
+            "type": "string"
+          },
+          {
+            "name": "X-AdminUser-Email",
+            "in": "header",
+            "description": "e.g. apiqa@rocketpin.com",
+            "required": false,
+            "x-example": "apiqa@rocketpin.com",
+            "type": "string"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "e.g. application/vnd.rocketpin+json; version=2",
+            "required": false,
+            "x-example": "application/vnd.rocketpin+json; version=2",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mission": {
+                  "type": "object",
+                  "properties": {
+                    "headquarter_id": {
+                      "type": "number",
+                      "description": "Id de sucursal obtenido previamente mediante [POST] /api/headquarters"
+                    },
+                    "address_id": {
+                      "type": "number",
+                      "description": "Se asinga el mismo valor que el atributo anterior"
+                    },
+                    "schedule": {
+                      "type": "number",
+                      "description": "Fecha en que se encuentra agendada la inspección del vehículo en formato EPOCH"
+                    },
+                    "extension": {
+                      "type": "object",
+                      "properties": {
+                        "rut": {
+                          "type": "string",
+                          "description": "Rut del solicitante"
+                        },
+                        "cellphone": {
+                          "type": "string",
+                          "description": "Celular del solicitante"
+                        },
+                        "first_name": {
+                          "type": "string",
+                          "description": "Nombre del solicitante"
+                        },
+                        "last_name": {
+                          "type": "string",
+                          "description": "Apellido paterno del solicitante"
+                        },
+                        "second_last_name": {
+                          "type": "string",
+                          "description": "Apellido materno del solicitante"
+                        },
+                        "brand_id": {
+                          "type": "string",
+                          "description": "Código de identificador de marca del vehículo. (Este catálogo será suministrador por el integrador)"
+                        },
+                        "brand": {
+                          "type": "string",
+                          "description": "Descripción de la marca del vehículo. (Este catálogo será suministrador por el integrador)"
+                        },
+                        "model_id": {
+                          "type": "string",
+                          "description": "Código de identificador de modelo. (Este catálogo será suministrador por el integrador)"
+                        },
+                        "model": {
+                          "type": "string",
+                          "description": "Descripción del modelo del vehículo. (Este catálogo será suministrador por el integrador)"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Nombre completo del solicitante"
+                        },
+                        "licence_plate": {
+                          "type": "string",
+                          "description": "Patente del vehículo"
+                        },
+                        "chassis_number": {
+                          "type": "string",
+                          "description": "Número de chassis"
+                        }
+                      },
+                      "required": [
+                        "rut",
+                        "cellphone",
+                        "first_name",
+                        "last_name",
+                        "second_last_name",
+                        "brand_id",
+                        "brand",
+                        "model_id",
+                        "model",
+                        "name",
+                        "licence_plate",
+                        "chassis_number"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "headquarter_id",
+                    "address_id",
+                    "schedule"
+                  ]
+                }
+              },
+              "example": {
+                "mission": {
+                  "headquarter_id": 979337,
+                  "address_id": 979337,
+                  "schedule": 1553065200,
+                  "extension": {
+                    "rut": "18777671-6",
+                    "cellphone": "956475839",
+                    "first_name": "Gabriel",
+                    "last_name": "Rico",
+                    "second_last_name": "Castro",
+                    "brand_id": "10",
+                    "brand": "CHEVROLET",
+                    "model_id": "94",
+                    "model": "AVEO",
+                    "name": "Gabriel Rico Castro",
+                    "licence_plate": "MT3453",
+                    "chassis_number": "Y34YU34YEHWEUY"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/api/missions/{missionId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Muestra detalles de una misión",
+        "tags": [
+          "Mission Resource"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/campains": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Ver listado de campañas (campains)\n\n<!-- ####Parameters\n - *search*: (string) Buscar en los campos mas relevantes por un match\n - *type*: (string) Buscar solo clients de ese tipo\n - *page*: (int) Numero de pagina (default: 1)\n - *pageSize*: (int) Tamaño de pagina (default: 20)\n\n####Headers\n - *X-Page*: (int) La pagina correspondiente a la respuesta\n - *X-Page-Total*: (int) El total de paginas disponibles -->",
+        "tags": [
+          "Campain Resources"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/campains/{campainId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Ver detalles de una campaña",
+        "tags": [
+          "Campain Resources"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/missions/{missionId}/responses": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Muestra el listado de respuestas",
+        "tags": [
+          "Responses Resources"
+        ],
+        "parameters": []
+      }
+    },
+    "/api/builders/{builderId}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {},
+            "examples": {}
+          }
+        },
+        "summary": "",
+        "operationId": "",
+        "description": "Muestra el detalle de un formulario",
+        "tags": [
+          "Builder Resources"
+        ],
+        "parameters": []
+      }
+    }
+  },
+  "definitions": {},
+  "securityDefinitions": {},
+  "tags": [
+    {
+      "name": "Sessions Resource",
+      "description": "La siguiente seccion esta relacionada con las sessiones de usuario. Este endpoint no cuenta con un modelo propio. La mayoría de las respuestas hacen referencia al modelo de usuario.\n\nEs indispensable tener una sesión valida para realizar cualquier consulta en al API. Si solo se tiene un usuario y password es necesario solicitar el token a través de este recurso.\n\n###User Model\n\n- id (string) : Id session\n\n- user (object): Usuario"
+    },
+    {
+      "name": "Creación de una misión",
+      "description": "Para automatizar el proceso de creación de misiones existen dos pasos \nesenciales que deben realizarse:\n\n1) Creación de la sucursal\n2) Creación de la misión\n\nCada paso se logra mediante el acceso a nuestra API REST teniendo en cuenta \ntodas las consideraciones que se indicarán seguidamente.\n\nLa **sucursal** consiste en la ubicación geográfica donde será llevada a cabo la misión, en tal sentido se requiere suministrar las coordenadas de la misma \ny el texto indicativo de dicha dirección.\n\nLa misión a su vez se corresponde con el tipo más general de información que reune un conjunto de atributos \npara describir la encuesta/formulario que desea ser efectuado. Nuestro modelo de misiones ha evolucionado para tipificarse \nen unidades de información con propósitos más específicos. Estos sub-tipos son:\n\n- Verificaciones de domicilio.\n\n- Verificaciones laborales.\n\n- Verificaciones de propiedad.\n\n- Inspección de vehículos\n\n- Inspecciones médicas"
+    },
+    {
+      "name": "Headquarter Resource",
+      "description": "Como indicamos anteriormente, el primer paso consiste en la creación de \nla sucursal. Para ello debemos ejecutar un POST hacía el endpoint /api/headquarters. \nSin embargo, una sucursal debe pertenecer a una comuna y se requiere indicar el identificador\nde la comuna como parte de los datos de la creación de la sucursal."
+    },
+    {
+      "name": "Mission Resource",
+      "description": "El conjunto de datos que le da contexto a la misión, provienen de la campaña dentro de la cual será construida. \nEs decir en la campaña se reunen todos los atributos base, reglas de ejecución, asignación del formulario de preguntas,\nentre otros. Por lo tanto cada misión pertenece a una campaña y cada cliente Rocketpin que desea crear misiones de forma automatizada\ndeberá saber a que identificador de campaña pertenecerá la misión a crear.\n\n### Mission Model\n\n- id (int): Id misión\n\n- title (string): Titulo de la campaña\n\n- public_name (string): Nombre publico de la campaña\n\n- amount (int): Dinero de recompensa\n\n- reward_points (int): Puntos de recompensa\n\n- level (object): Nivel requerido para poder tomar la misón\n\n- state (string): Estado actual de la misión  `<started, taken, collecting_stakeholders, waiting_authorization, completed, approved, disapproved, cancelled, unfinished>`\n\n- created_at (string): Fecha y hora de creación de la misión\n\n- updated_at (string): Fecha y hora de la última actualización de la misión\n\n- start_date_time (string): Fecha y hora de comenzo de la misión\n\n- end_date_time (string): Fecha y hora de termino de la misión\n\n- logo (string): Url de la foto de la misión\n\n- schedule (string): Fecha de agendamiento (en caso de ser una misión agendada)\n\n- headquarter (object): Sucuersal donde esta asociada a la misión\n\n- location_cords (object): Coordenadas de la ubicación de la misión\n\n- address (object): Dirección de la sucursal asociada a la misión\n\n- campain: (object): Datos basicos de la campaña asociada a la misión"
+    },
+    {
+      "name": "Tipos de misiones",
+      "description": "Como indicamos al principio, la misión puede aplicarse a objetivos de negocio más específicos. Para tal fin \nactualmente se definen 5 subtipos cada uno con sus atributos propios que lo definen:\n\n1. Verificaciones de domicilio.\n\n2. Verificaciones laborales.\n\n3. Verificaciones de propiedad.\n\n4. Inspección de vehículos\n\n5. Inspecciones médicas\n\nLos sub-tipos poseen en común los siguientes atributos, por lo tanto cada uno de ellos debe contener valores para los mismos:\n\n- rut (string): Rut del solicitante\n\n- cellphone (string): Celular del solicitante\n\n- first_name (string): Nombre del solicitante\n\n- last_name (string): Apellido paterno del solicitante\n\n- second_last_name (string): Apellido materno del solicitante\n\nA su vez los parámetros por sub-tipo son:\n\n**Verificación de domicilio**\n\n- email (string): Email de la persona a verificar\n\n**Verificación laboral**\n\n- email (string): Email de la persona a verificar\n\n- work_position (string): Cargo laboral de la persona a verificar\n\n- work_section (string): Área laboral de la persona a verificar\n\n- company_rut (string): Rut de la compañía donde el verificado labora\n\n- company_business_name (string): Nombre de la compañia donde el verificado labora\n\n- company_business_line (string): Línea de negocios de la compañía donde el verificado labora\n\n**Verificación de propiedad**\n\n- other (string): Data descriptiva\n\n**Inspeción de vehículo**\n\n- brand_id (string): Código de identificador de marca del vehículo. (Este catálogo será suministrador por el integrador)\n\n- brand (string): Descripción de la marca del vehículo. (Este catálogo será suministrador por el integrador)\n\n- model_id (string): Código de identificador de modelo. (Este catálogo será suministrador por el integrador)\n\n- model (string): Descripción del modelo del vehículo. (Este catálogo será suministrador por el integrador)\n\n- name (string): Nombre completo del solicitante\n\n- licence_plate (string): Patente del vehículo\n\n- chassis_number (string): Número de chassis\n\n**Inspección médica**\n\n- company_rut (string): Rut de la compañía médica\n\n- company_business_name (string):  Nombre de la compañía médica\n\n- license_start_date (string): Fecha de licencia\n\n- license_type (string): Tipo de licencia\n\n- email (string): email de contacto\n\nPara los efectos documentales, a continuación crearemos una misión del subtipo particular \"Inspección de Vehículo\". La diferencia entre cada sub-tipo de misión radica \nen asignar dentro del objeto embebido *extension* los atributos que correspondan.\n\nAsumiendo que el identificador de campaña es el número 1110 (campainId = 1110) indicaremos como se consume el servicio"
+    },
+    {
+      "name": "Estados de misiones",
+      "description": "Una misión puede pasar por muchos estados diferentes.\n\nSi se desea, El sistema puede notificar cada vez que ocurre un cambio de estado mediante la implementación de un **Webhook**. Esta característica no es autoadministrable, por lo que es necesario que el cliente solicite esta habilitación.\n\nA continuación se detalla los estados posibles dentro del ciclo de vida de una misión.\nEl siguiente diagrama describe los posibles flujos de estados:\n![mision](https://fresh-3.s3.amazonaws.com/mission-flow.png)\n\n##### Sin Asignar (initial)\n\nTan pronto se ejecuta (crea) una misión, sus datos son poblados heredando la configuración de la campaña (hereda su nombre, precio, fecha de inicio y termino, país, etc.)\nEn el estado inicial, la misión se encuentra a la espera de ser asignada a un agente.\n\n##### Postulación (collecting_stakeholders):\n\nCuando la campaña es configurada \"Con Postulación\", las misiones cambian automáticamente al estado collecting_stakeholders mientras son ejecutadas. Conceptualmente se inician en este estado.\nCuando una misión se encuentra en postulación, tiene la característica de que varios agentes pueden postular a hacer la misión (no se asigna de inmediato), luego, es el equipo de Rocketpin quien elige a un agente en una lista de postulantes para realizar la misión.\n\n##### Asignada (taken):\n\nUna ves la misión tiene asignado un agente, puede pasar al estado \"Asignada\". En este estado el agente tiene a disposición la misión para empezar a responder la encuesta lo antes posible. Es importante considerar que hay un tiempo permitido para que un agente pueda tener asignada una misión, que varia entre 1 y 48hrs dependiendo el tipo de misión. Si el agente decide no hacer la misión, puede liberarla desde la app, esto le traerá consecuencias negativas en su reputación (baja su cumplimiento). La misión liberada vuelve al estado \"sin asignar\" o \"postulación\" dependiendo el tipo de campaña.\n\n##### Iniciada (started):\n\nUna vez el agente se encuentra en el lugar, puede iniciar la misión a travez de la app. En este punto el agente cuenta con un tiempo designado para completar la misión, de lo contrario la misión se cancelara (más adelante se explica el estado cancelado).\n\n##### Completado (completed):\n\nLuego que el agente responda toda las preguntas (previa validación de la app), entonces se puede finalizar la misión, donde pasa a un exhaustivo proceso de revisión de la información por parte del equipo de Rocketpin. El siguiente paso es decidir si la misión se aprueba o se rechaza. Al rechazar la misión, el administrador de Rocketpin tiene la posibilidad de clonar la misión generando una nueva en el mismo punto.\n\n##### Aprobado (approved):\n\nEn este punto la misión (y toda su información) es considerada como valida por el equipo de Rocketpin y la información recaudada se usara para múltiples reportes orientados a las necesidades del cliente.\n\n##### Rechazado (disapproved):\n\nSi la misión se rechaza, entonces no cumple con las exigencias de Rocketpin. Esto perjudica a la reputación del agente y es posible que el equipo de Rocketpin decida clonarla para volver a hacer la tarea y cumplir con las necesidades del cliente.\n\n##### Cancelado (cancelled):\n\nSucede cuando el agente demora más de lo estipulado para completar la misión. Esto afecta la reputación del agente y además vuelve a generar una nueva misión en estado \"sin asignar\" en el mismo punto geográfico, con el fin de que otro agente pueda completarla correctamente."
+    },
+    {
+      "name": "Address Resources",
+      "description": "La siguiente seccion esta relacionada con las direcciones y rocketpin.\n\n### Address Model\n\n- id (int): Id de la sucursal\n\n- street (string): Direccion de la sucursal\n\n- city (string): Ciudad de la sucursal\n\n- long (float): longitud terrestre (coordenadas)\n\n- lat (float): latitud terrestre (coordenadas)\n\n- addressable_id (int): Id relacion polimorfica\n\n- addressable_type (string): Nombre clase relacion polimorfica\n\n- commune_id (int): Id de comuna\n\n- created_at (datetime): Fecha de creación\n\n- updated_at (datetime): Fecha de ultima modificación\n\n- sub_info (string): Información adicional de la ubicación\n\n- country_id (int): Id de País"
+    },
+    {
+      "name": "Campain Resources",
+      "description": "La siguiente seccion esta relacionada con las campañas y rocketpin.\n\n###Campain Model\n\n- id (int) : Id empresa\n\n- title (string) : Titulo de la campaña\n\n- public_name (string) : Nombre publico de la campaña\n\n- amount (int) : Dinero de recompensa\n\n- reward_points (int) : Puntos de recompensa\n\n- launch_type (string) : tipo de ejecución de la campaña `<immediately, scheduled_auto_mapping, scheduled_authorized, scheduled_manual, collecting_stakeholders>`\n\n- start_date_time (string) : Fecha de inicio de la campaña\n\n- end_date_time (string) : Fecha de termino de la misión\n\n- missions_qty (string) : Cantidad de misiones asociadas a la campaña\n\n- logo (url) : Logo asociado a la campaña\n\n- klass_name (int): clase de la campaña `<campain, custom_campain>`\n\n- has_required_level (boolean): Indica si el shopper tiene el nivel requerido para tomar la misión"
+    },
+    {
+      "name": "Responses Resources",
+      "description": "La siguiente sección esta relacionada con las respuestas asociadas a una misión.\n\n### Response Model\n\n- id (string): Id de la respuesta\n\n- component_type (string): Tipo de componente\n\n- index (int): Índice del componente\n\n- label (string): Título de la pregunta\n\n- value (string): Valor simple de la respuesta (para tipos: 'imageInput', 'textInput', 'textArea')\n\n- value (object): Valor como objeto de la respuesta (para tipos: 'radio', 'select', 'checkbox')\n\n- form_component (object): Componente asociado a la respuesta"
+    },
+    {
+      "name": "Response - Value Resources",
+      "description": "La siguiente sección esta relacionada con el valor de una respuesta cuando es de tipo object.\n\n### Value Model\n\n- text (string): Etiqueta de la respuesta\n\n- value (int): Valor de la respuesta"
+    },
+    {
+      "name": "Builder Resources",
+      "description": "La siguiente sección esta relacionada con los Formularios y rocketpin.\n\n### Builder Model\n\n- id (string): Id del formulario\n\n- public_name (string): Nombre público del formulario\n\n- internal_name (string): Nombre interno del formulario\n\n- description (string): Descripción del formulario\n\n- display (string): Tipo de formulario ('single' o 'wizard')\n\n- created_at (datetime): Fecha de creación del formulario\n\n- updated_at (datetime): Fecha de la última modificación del formulario\n\n- forms (array): Lista de páginas asociadas al formulario"
+    },
+    {
+      "name": "Form Resources",
+      "description": "La siguiente sección esta relacionada con las páginas de los formularios.\n\n### Form Model\n\n- id (string): Id de la página\n\n- title (string): Título de la página\n\n- description (string): Descripción de la página\n\n- index (int): Índice de página\n\n- form_components (array): Lista de componentes asociados a la página"
+    },
+    {
+      "name": "FormComponent Resources",
+      "description": "La siguiente sección esta relacionada con los componentes asociados a una página.\n\n### FormComponent Model\n\n- id (string): Id del componente\n\n- form_id (string): Id de la página asociada\n\n- component (string): Tipo de componente ('imageInput', 'textInput', 'radio', 'select', 'checkbox', 'textArea', 'Image', 'Html')\n\n- label (string): Título del componente\n\n- description (string): Descripción del componente\n\n- placeholder (string): Valor de muestra del componente\n\n- internal_name (string): Nombre interno del componente\n\n- options (array): Lista de opciones que puede tener el componente (solo para tipos: 'select', 'radio', 'checkbox')\n\n- required (boolean): Indica si el componente es obligatorio\n\n- randomize (boolean): Indica si el valor es aleatorio\n\n- mime_type (boolean): Indica si el componente necesita tipo de archivo (solo para tipo: 'Image')\n\n- editable (boolean): Indica si el componente es editable\n\n- display (boolean): Indica si el componente se debe mostrar\n\n- validation (string): Tipo de validación del componente\n\n- weight (int): Peso del componente\n\n- dependent_from (object): Dependencia del componente\n\n- index (int): Índice del componente\n\n- custom_attributes (object): Atributos personalizados del componente"
+    },
+    {
+      "name": "FormComponent - Options Resources",
+      "description": "La siguiente sección esta relacionada con las opciones de un componente de tipo lista.\n\n### Options Model\n\n- text (string): Descripción de la opción\n\n- value (int): Valor de la opción\n\n- hidden (boolean): Indica si la opción no se muestra"
+    },
+    {
+      "name": "Webhooks",
+      "description": "Nuestra plataforma permite notificarles los cambios de estado de una misión a través de un webhook. Es decir nos pueden inidicar una URL y los parámetros requeridos para enviarle los cambios de estado.\nNuestro mecanismo es bastante flexible con la intención de enviar a su servicio de recepción un request de acuerdo a sus especifícaciones.\n\nUn ejemplo de notificación básico del cambio de estado de una misión se puede construir indicándonos los siguientes parámetros que requiera su servicio\n\n```\n{\n    \"url\" => \"https://your.url.com\",\n    \"http_method\" => :put,\n    \"headers\" => {\n        \"key-you-want\" => \"value-yo-want\"\n    },\n    \"query_strings\" => {\n        \"mission_id\" => \"{id}\",\n        \"mission_state\" => \"{state}\"\n    }\n}\n```\n\nEn este caso \"url\", \"http_method\", \"headers\" podría ser indicado por el cliente. El \"query_strings\" puede ser acordado entre Rocketpin y el cliente. Allí en el ejemplo se sugiere \"mission_id\" que es nuestro identificador interno de misión y el nuevo estado \"mission_state\".\n\nOtro ejemplo de notificación para un servicio más especializado sería un Webhook para notificar a un landbot Whatsapp en donde se requieren datos más personalizados:\n\n```\n{\n    \"url\" => \"https://your.url.com\",\n    \"http_method\" => :post,\n    \"headers\" => {\n        \"your-header-key\" => \"your-header-value\"\n    },\n    \"query_strings\" => {\n        \"mission_id\" => \"{id}\",\n        \"mission_state\" => \"{state}\",\n        \"surveyed_full_name\" => \"{extension.name}\",\n        \"surveyed_cellphone\" => \"{extension.cellphone}\",\n        \"country_code\" => \"CL\",\n        \"client_name\" => \"Rocketpin\",\n        \"landbot_template_id\" => 357,\n        \"landbot_bot_id\" => 433229\n    }\n}\n```"
+      }
+  ]
+}
