@@ -345,7 +345,7 @@ paths:
                     central, en edificio de rejas negras
                   lat: 33.359
                   long: 70.66611
-                  commune_id: '13101'
+                  commune_id: '13107'
   '/api/campains/{campainId}/missions':
     get:
       responses:
@@ -363,7 +363,7 @@ paths:
       responses: {}
       summary: ''
       operationId: ''
-      description: Creación de inspección de Vehículos
+      description: Creación de Verificación de domicilio
       tags:
         - Tipos de misiones
       parameters:
@@ -401,16 +401,10 @@ paths:
                   headquarter_id:
                     type: number
                     description: >-
-                      Id de sucursal obtenido previamente mediante [POST]
-                      /api/headquarters
+                      Id de sucursal obtenido previamente mediante [POST] /api/headquarters
                   address_id:
                     type: number
                     description: Se asinga el mismo valor que el atributo anterior
-                  schedule:
-                    type: number
-                    description: >-
-                      Fecha en que se encuentra agendada la inspección del
-                      vehículo en formato EPOCH
                   extension:
                     type: object
                     properties:
@@ -429,56 +423,27 @@ paths:
                       second_last_name:
                         type: string
                         description: Apellido materno del solicitante
-                      brand_id:
-                        type: string
-                        description: >-
-                          Código de identificador de marca del vehículo. (Este
-                          catálogo será suministrador por el integrador)
-                      brand:
-                        type: string
-                        description: >-
-                          Descripción de la marca del vehículo. (Este catálogo
-                          será suministrador por el integrador)
-                      model_id:
-                        type: string
-                        description: >-
-                          Código de identificador de modelo. (Este catálogo será
-                          suministrador por el integrador)
-                      model:
-                        type: string
-                        description: >-
-                          Descripción del modelo del vehículo. (Este catálogo
-                          será suministrador por el integrador)
                       name:
                         type: string
                         description: Nombre completo del solicitante
-                      licence_plate:
+                      email:
                         type: string
-                        description: Patente del vehículo
-                      chassis_number:
-                        type: string
-                        description: Número de chassis
+                        description: Email de la persona a verificar
                     required:
                       - rut
                       - cellphone
                       - first_name
                       - last_name
                       - second_last_name
-                      - brand_id
-                      - brand
-                      - model_id
-                      - model
                       - name
-                      - licence_plate
-                      - chassis_number
+                      - email
                 required:
                   - headquarter_id
                   - address_id
-                  - schedule
             example:
               mission:
-                headquarter_id: 979337
-                address_id: 979337
+                headquarter_id: 1041509
+                address_id: 1041509
                 schedule: 1553065200
                 extension:
                   rut: 18777671-6
@@ -486,13 +451,8 @@ paths:
                   first_name: Gabriel
                   last_name: Rico
                   second_last_name: Castro
-                  brand_id: '10'
-                  brand: CHEVROLET
-                  model_id: '94'
-                  model: AVEO
                   name: Gabriel Rico Castro
-                  licence_plate: MT3453
-                  chassis_number: Y34YU34YEHWEUY
+                  email: gabrielrico@gmail.com
   '/api/missions/{missionId}':
     get:
       responses:
@@ -578,18 +538,12 @@ tags:
       endpoint no cuenta con un modelo propio. La mayoría de las respuestas
       hacen referencia al modelo de usuario.
 
-
       Es indispensable tener una sesión valida para realizar cualquier consulta
       en al API. Si solo se tiene un usuario y password es necesario solicitar
       el token a través de este recurso.
 
-
       ###User Model
-
-
       - id (string) : Id session
-
-
       - user (object): Usuario
   - name: Creación de una misión
     description: >-
@@ -723,9 +677,7 @@ tags:
   - name: Tipos de misiones
     description: >-
       Como indicamos al principio, la misión puede aplicarse a objetivos de
-      negocio más específicos. Para tal fin 
-
-      actualmente se definen 5 subtipos cada uno con sus atributos propios que
+      negocio más específicos. Para tal fin actualmente se definen 5 subtipos cada uno con sus atributos propios que
       lo definen:
 
 
@@ -846,17 +798,15 @@ tags:
 
       - email (string): email de contacto
 
-
-      Para los efectos documentales, a continuación crearemos una misión del
-      subtipo particular "Inspección de Vehículo". La diferencia entre cada
-      sub-tipo de misión radica 
-
-      en asignar dentro del objeto embebido *extension* los atributos que
+      A continuación crearemos una misión del subtipo particular "Inspección de Domicilio". La diferencia entre cada
+      sub-tipo de misión radica en asignar dentro del objeto embebido *extension* los atributos que
       correspondan.
 
+      El primer paso para la creación de la misión es haber consumido el servicio de creación de headquarter de la cual extraeremos
+      el atributo id de dicha respuesta json y será usado como atributo headquarter_id y address_id en el json body del request para la creación de la misión
 
-      Asumiendo que el identificador de campaña es el número 1110 (campainId =
-      1110) indicaremos como se consume el servicio
+      Asumiendo que el identificador de campaña es el número 885 (campainId =
+      885) indicaremos como se consume el servicio
   - name: Estados de misiones
     description: >-
       Una misión puede pasar por muchos estados diferentes.
