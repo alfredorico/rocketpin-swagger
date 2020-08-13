@@ -167,7 +167,7 @@ paths:
                 description: Contraseña del usuario de autenticación al API
             example:
               email: apiqa@rocketpin.com
-              password: XXXXX
+              password: apiqa2020!
     delete:
       responses:
         '204':
@@ -181,10 +181,10 @@ paths:
         - Sessions Resource
       parameters:
         - in: header
-          name: X-ADMINUSER-TOKEN
+          name: X-AdminUser-Token
           description: Token obtenido desde la última autenticación efectuada 
           required: true
-          x-example: xxxxxxxxxxxxxxxxxxxx
+          x-example: NrTyh5Ryz8y67y1JQx9q
           type: string          
   /api/me:
     get:
@@ -198,7 +198,25 @@ paths:
       description: Muesta datos del usuario actual
       tags:
         - Sessions Resource
-      parameters: []
+      parameters:
+        - name: X-AdminUser-Email
+          in: header
+          description: usuario de autenticación del API Rocketpin
+          required: true
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: NrTyh5Ryz8y67y1JQx9q
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: true
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string          
   /api/communes:
     get:
       responses:
