@@ -123,47 +123,51 @@ schemes:
 paths:
   /api/sessions:
     post:
+      produces:
+        - application/json      
       responses:
-        '201':
-          description: Created
-          headers: {}
-          examples: {}
-      summary: ''
-      operationId: ''
-      description: Crea una nueva session
+        200:
+          description: 
+            Objeto de sesión conteniendo el token de autenticación. A continuación se indican los campos de mayor utilidad devueltos por el proceso.
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: el ID de la sesión recién creada
+                example: 283766              
+              email:
+                type: string
+                description: email del usuario del API autenticado
+                example: "apiqa@rocketpin.com"              
+              authentication_token:
+                type: string
+                example: "NrTyh5Ryz8y67y1JQx9q"              
+                description: token de autenticación generado para ser usado en las siguiente peticiones al API
+      description: 
+        Crea una nueva sesión en la que se obtiene un nuevo token de autenticación para ser usado en futuras peticiones al API.
       tags:
         - Sessions Resource
       parameters:
-        - name: X-Auth-Platform
-          in: header
-          description: >-
-            e.g. (optional, string, `facebook`) - Especifica que plataforma se
-            usara para autentificar al usuario (solo en caso de autenticacion a
-            travez de Oauth)
-          required: false
-          x-example: >-
-            (optional, string, `facebook`) - Especifica que plataforma se usara
-            para autentificar al usuario (solo en caso de autenticacion a travez
-            de Oauth)
-          type: string
         - name: body
           in: body
+          description: >-
+            Objeto para efectuar la autenticación          
           schema:
             type: object
             required:
-              - 'session[email]'
+              - 'email'
+              - 'password'
             properties:
-              'session[email]':
+              'email':
                 type: string
-                description: Email del shopper
-              'session[password]':
+                description: Email del usuario de autenticación al API
+              'password':
                 type: string
-                description: Contraseña del shopper (solo en caso de autenticacion normal)
-              'session[token]':
-                type: string
-                description: >-
-                  Token del shopper (solo en caso de autenticacion a travez de
-                  Oauth)
+                description: Contraseña del usuario de autenticación al API
+            example:
+              email: apiqa@rocketpin.com
+              password: XXXXX
     delete:
       responses:
         '204':
@@ -189,7 +193,7 @@ paths:
       tags:
         - Sessions Resource
       parameters: []
-  '/api/communes':
+  /api/communes:
     get:
       responses:
         '200':
@@ -868,7 +872,7 @@ tags:
 
 
       Una vez el agente se encuentra en el lugar, puede iniciar la misión a
-      travez de la app. En este punto el agente cuenta con un tiempo designado
+      traves de la app. En este punto el agente cuenta con un tiempo designado
       para completar la misión, de lo contrario la misión se cancelara (más
       adelante se explica el estado cancelado).
 
