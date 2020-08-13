@@ -179,7 +179,13 @@ paths:
       description: Elimina la session actual
       tags:
         - Sessions Resource
-      parameters: []
+      parameters:
+        - in: header
+          name: X-ADMINUSER-TOKEN
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: xxxxxxxxxxxxxxxxxxxx
+          type: string          
   /api/me:
     get:
       responses:
