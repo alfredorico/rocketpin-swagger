@@ -387,6 +387,18 @@ paths:
       tags:
         - Campain Resources
       parameters:
+        - in: query
+          name: limit
+          type: integer
+          required: false
+          description: El número misiones a consultar (por defecto se consulta un máximo de hasta 1000 misiones si no se indica un valor)
+          x-example: 30
+        - in: query
+          name: page
+          type: integer
+          required: false
+          description: El número de la página a consultar para obtener una cantidad a las 1000 misiones iniciales.
+          x-example: 1
         - name: campainId
           in: path
           description: Identificador de la campaña
