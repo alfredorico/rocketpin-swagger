@@ -612,7 +612,31 @@ paths:
       description: Ver detalles de una campaña
       tags:
         - Campain Resources
-      parameters: []
+      parameters:
+        - name: campainId
+          in: path
+          description: Identificador de la campaña
+          required: true
+          type: number
+          x-example: 933      
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
+          type: string
+        - name: X-AdminUser-Email
+          in: header
+          description: e.g. apiqa@rocketpin.com
+          required: false
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: false
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string      
   '/api/missions/{missionId}/responses':
     get:
       responses:
@@ -625,7 +649,31 @@ paths:
       description: Muestra el listado de respuestas
       tags:
         - Responses Resources
-      parameters: []
+      parameters:
+        - name: missionId
+          in: path
+          description: Identificador de la misión
+          required: true
+          type: string
+          x-example: 5ef26d73fffbe91d83f9ae3e      
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
+          type: string
+        - name: X-AdminUser-Email
+          in: header
+          description: e.g. apiqa@rocketpin.com
+          required: false
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: false
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string       
   '/api/builders/{builderId}':
     get:
       responses:
@@ -638,7 +686,31 @@ paths:
       description: Muestra el detalle de un formulario
       tags:
         - Builder Resources
-      parameters: []
+      parameters:
+        - name: builderId
+          in: path
+          description: Identificador del formulario 
+          required: true
+          type: string
+          x-example: 5c3fb678fffbe968c62cc232      
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
+          type: string
+        - name: X-AdminUser-Email
+          in: header
+          description: e.g. apiqa@rocketpin.com
+          required: false
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: false
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string
 definitions: {}
 securityDefinitions: {}
 tags:
