@@ -247,9 +247,9 @@ paths:
           description: "Identificador de País. Los valores se corresponden a: 1 - Chile, 2 - Argentina, 4 - Uruguay, 5 - México"
         - name: X-AdminUser-Token
           in: header
-          description: e.g. xxxxxxxxxxxxxxxxxxxx
-          required: false
-          x-example: xxxxxxxxxxxxxxxxxxxx
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
           type: string
         - name: X-AdminUser-Email
           in: header
@@ -298,9 +298,9 @@ paths:
       parameters:
         - name: X-AdminUser-Token
           in: header
-          description: e.g. xxxxxxxxxxxxxxxxxxxx
-          required: false
-          x-example: xxxxxxxxxxxxxxxxxxxx
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
           type: string
         - name: X-AdminUser-Email
           in: header
@@ -386,12 +386,39 @@ paths:
       description: Obtener misiones de una campaña
       tags:
         - Campain Resources
-      parameters: []
+      parameters:
+        - name: campainId
+          in: path
+          description: Identificador de la campaña
+          required: true
+          type: number
+          x-example: 885
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
+          type: string
+        - name: X-AdminUser-Email
+          in: header
+          description: e.g. apiqa@rocketpin.com
+          required: false
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: false
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string      
     post:
       responses: {}
       summary: ''
       operationId: ''
-      description: Creación de Verificación de domicilio
+      description:  >-
+        Creación de Verificación de domicilio
+
+        Es importante recordar que para la creación de una misión, se requiere haber creado una sucursal mediante el servicio  [POST] /api/headquarters y conservar el atributo "id" devuelto para ser usado en headquarter_id y address_id del presente servicio
       tags:
         - Tipos de misiones
       parameters:
@@ -400,11 +427,12 @@ paths:
           description: Identificador de la campaña
           required: true
           type: number
+          x-example: 885
         - name: X-AdminUser-Token
           in: header
-          description: e.g. xxxxxxxxxxxxxxxxxxxx
-          required: false
-          x-example: xxxxxxxxxxxxxxxxxxxx
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
           type: string
         - name: X-AdminUser-Email
           in: header
@@ -541,7 +569,25 @@ paths:
          - *X-Page-Total*: (int) El total de paginas disponibles -->
       tags:
         - Campain Resources
-      parameters: []
+      parameters:
+        - name: X-AdminUser-Token
+          in: header
+          description: Token obtenido desde la última autenticación efectuada 
+          required: true
+          x-example: zsKh-9yKzHin9zpk4zwv
+          type: string
+        - name: X-AdminUser-Email
+          in: header
+          description: e.g. apiqa@rocketpin.com
+          required: false
+          x-example: apiqa@rocketpin.com
+          type: string
+        - name: Accept
+          in: header
+          description: e.g. application/vnd.rocketpin+json; version=2
+          required: false
+          x-example: application/vnd.rocketpin+json; version=2
+          type: string      
   '/api/campains/{campainId}':
     get:
       responses:
